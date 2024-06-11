@@ -9,7 +9,7 @@ import Foundation
 
 final class FilterService {
     
-    func getFilmsByFilter() async throws -> [FilmModel] {
+    func getFilmsByFilter() async throws -> [FilmModel]? {
         let url = URL(string: "https://api.kinopoisk.dev/v1.4/movie")!
         var components = URLComponents(url: url, resolvingAgainstBaseURL: true)!
         let queryItems: [URLQueryItem] = [
@@ -28,6 +28,11 @@ final class FilterService {
         ]
         
         let (data, _) = try await URLSession.shared.data(for: request)
-        return data
+        do {
+            let films = try JSONDecoder().decode(NetworkModel.self, from: data)
+            return films.docs
+        } catch {
+            throw error
+        }
     }
 }

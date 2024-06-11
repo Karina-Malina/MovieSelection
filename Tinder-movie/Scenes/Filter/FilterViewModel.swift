@@ -27,8 +27,8 @@ final class FilterViewModel: ObservableObject {
     }
     
     func findAction() {
-        filterService.getFilmsByFilter { films in
-            
+        Task {
+            let films = try? await filterService.getFilmsByFilter()
         }
     }
 }
